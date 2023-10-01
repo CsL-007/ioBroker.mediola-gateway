@@ -176,6 +176,34 @@ class MediolaGateway extends utils.Adapter {
                         },
                         native: {}
                       });
+                    } else if (element.type === "ER") {
+                      const objName = element.type + element.adr;
+                      if (element.adr.length != 2) {
+                        this.log.error("this ER element has not 2 chars: " + element.adr);
+                      }
+                      this.setObjectNotExists("state." + objName, {
+                        type: "state",
+                        common: {
+                          name: "ER " + element.adr,
+                          type: "string",
+                          role: "text",
+                          read: true,
+                          write: false
+                        },
+                        native: {}
+                      });
+                      this.setObjectNotExists("action." + objName, {
+                        type: "state",
+                        common: {
+                          name: "ER " + element.adr + " 1=up, 2=down, 3=stop",
+                          type: "string",
+                          role: "text",
+                          read: true,
+                          write: true
+                        },
+                        native: {}
+                      });
+                      this.setState("state." + objName, { val: element.state, ack: true });
                     } else {
                       const objName = "sysvars.id" + element.adr;
                       const description = "sysvar" + element.adr;
@@ -306,6 +334,14 @@ class MediolaGateway extends utils.Adapter {
               this.log.debug(JSON.stringify(jsonData));
             } else if (jsonData.type === "RT") {
               this.log.debug(JSON.stringify(jsonData));
+            } else if (jsonData.type === "BK") {
+              this.log.debug(JSON.stringify(jsonData));
+            } else if (jsonData.type === "NY") {
+              this.log.debug(JSON.stringify(jsonData));
+            } else if (jsonData.type === "DY") {
+              this.log.debug(JSON.stringify(jsonData));
+            } else if (jsonData.type === "ER") {
+              this.log.debug(JSON.stringify(jsonData));
             } else if (jsonData.type === "HM") {
             } else {
               this.log.debug("data type not known: " + jsonData.type);
@@ -425,6 +461,7 @@ class MediolaGateway extends utils.Adapter {
     this.subscribeStates("action.NY*");
     this.subscribeStates("action.DY*");
     this.subscribeStates("action.RT*");
+    this.subscribeStates("action.ER*");
   }
   onUnload(callback) {
     try {
@@ -530,7 +567,7 @@ class MediolaGateway extends utils.Adapter {
           }
         } else if (dataName.startsWith("BK")) {
           if (subfolder === "action") {
-            const bkId = dataName.replace("BK", "");
+            const actorId = dataName.replace("BK", "");
             let direction = "02";
             if (state.val === "1") {
               direction = "00";
@@ -542,7 +579,7 @@ class MediolaGateway extends utils.Adapter {
               this.log.error("only 1 (up), 2 (down) or 3 (stop) is allowed. For safety do a stop");
             }
             if (validMediolaFound) {
-              let reqUrl = this.genURL() + "XC_FNC=SendSC&type=BK&data=0101" + bkId + direction;
+              let reqUrl = this.genURL() + "XC_FNC=SendSC&type=BK&data=0101" + actorId + direction;
               reqUrl = encodeURI(reqUrl);
               import_axios.default.get(reqUrl).then((res) => {
                 this.log.debug(res.data);
@@ -561,7 +598,7 @@ class MediolaGateway extends utils.Adapter {
           }
         } else if (dataName.startsWith("RT")) {
           if (subfolder === "action") {
-            const bkId = dataName.replace("RT", "");
+            const actorId = dataName.replace("RT", "");
             let direction = "10";
             if (state.val === "1") {
               direction = "20";
@@ -573,7 +610,7 @@ class MediolaGateway extends utils.Adapter {
               this.log.error("only 1 (up), 2 (down) or 3 (stop) is allowed. For safety do a stop");
             }
             if (validMediolaFound) {
-              let reqUrl = this.genURL() + "XC_FNC=SendSC&type=RT&data=" + direction + bkId;
+              let reqUrl = this.genURL() + "XC_FNC=SendSC&type=RT&data=" + direction + actorId;
               reqUrl = encodeURI(reqUrl);
               import_axios.default.get(reqUrl).then((res) => {
                 this.log.debug(res.data);
@@ -592,8 +629,8 @@ class MediolaGateway extends utils.Adapter {
           }
         } else if (dataName.startsWith("NY")) {
           if (subfolder === "action") {
-            const bkId = dataName.replace("NY", "");
-            if (bkId.length === 8) {
+            const actorId = dataName.replace("NY", "");
+            if (actorId.length === 8) {
               let direction = "00";
               if (state.val === "1") {
                 direction = "22";
@@ -605,7 +642,7 @@ class MediolaGateway extends utils.Adapter {
                 this.log.error("only 1 (up), 2 (down) or 3 (stop) is allowed. For safety do a stop");
               }
               if (validMediolaFound) {
-                let reqUrl = this.genURL() + "XC_FNC=SendSC&type=NY&data=" + bkId + direction;
+                let reqUrl = this.genURL() + "XC_FNC=SendSC&type=NY&data=" + actorId + direction;
                 reqUrl = encodeURI(reqUrl);
                 import_axios.default.get(reqUrl).then((res) => {
                   this.log.debug(res.data);
@@ -627,8 +664,8 @@ class MediolaGateway extends utils.Adapter {
           }
         } else if (dataName.startsWith("DY")) {
           if (subfolder === "action") {
-            const bkId = dataName.replace("DY", "");
-            if (bkId.length === 8) {
+            const actorId = dataName.replace("DY", "");
+            if (actorId.length === 8) {
               let direction = "55";
               if (state.val === "1") {
                 direction = "11";
@@ -640,7 +677,7 @@ class MediolaGateway extends utils.Adapter {
                 this.log.error("only 1 (up), 2 (down) or 3 (stop) is allowed. For safety do a stop");
               }
               if (validMediolaFound) {
-                let reqUrl = this.genURL() + "XC_FNC=SendSC&type=DY&data=" + bkId + direction;
+                let reqUrl = this.genURL() + "XC_FNC=SendSC&type=DY&data=" + actorId + direction;
                 reqUrl = encodeURI(reqUrl);
                 import_axios.default.get(reqUrl).then((res) => {
                   this.log.debug(res.data);
@@ -656,6 +693,42 @@ class MediolaGateway extends utils.Adapter {
               }
             } else {
               this.log.error("DY id is not 8 chars long.");
+            }
+          } else {
+            this.log.debug("Wrong subfolder: " + subfolder + "from device: " + dataName);
+          }
+        } else if (dataName.startsWith("ER")) {
+          if (subfolder === "action") {
+            const actorId = dataName.replace("ER", "");
+            if (actorId.length === 2) {
+              let direction = "02";
+              if (state.val === "1") {
+                direction = "01";
+              } else if (state.val === "2") {
+                direction = "00";
+              } else if (state.val === "3") {
+                direction = "02";
+              } else {
+                this.log.error("only 1 (up), 2 (down) or 3 (stop) is allowed. For safety do a stop");
+              }
+              if (validMediolaFound) {
+                let reqUrl = this.genURL() + "XC_FNC=SendSC&type=ER&data=" + actorId + direction;
+                reqUrl = encodeURI(reqUrl);
+                import_axios.default.get(reqUrl).then((res) => {
+                  this.log.debug(res.data);
+                  this.log.debug(reqUrl);
+                  if (res.data.toString().includes("XC_SUC") === false) {
+                    this.log.error(
+                      "mediola device rejected the command: " + state.val + " response: " + res.data
+                    );
+                  }
+                }).catch((error) => {
+                  this.log.error("mediola device not reached by sending SC data to ER");
+                  this.log.error(error);
+                });
+              }
+            } else {
+              this.log.error("ER id is not 2 chars long.");
             }
           } else {
             this.log.debug("Wrong subfolder: " + subfolder + "from device: " + dataName);
