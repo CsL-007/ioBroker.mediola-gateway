@@ -57,7 +57,7 @@ class MediolaGateway extends utils.Adapter {
   genURL() {
     let retVal = "";
     if (this.config.username === "") {
-      retVal = "http://" + foundIpAddress + "/cmd?" + "&auth=" + this.config.password;
+      retVal = "http://" + foundIpAddress + "/cmd?";
     } else {
       retVal = "http://" + foundIpAddress + "/command?XC_USER=" + this.config.username + "&XC_PASS=" + this.config.password + "&";
     }
@@ -69,7 +69,7 @@ class MediolaGateway extends utils.Adapter {
     );
     if (validMediolaFound && !sysvarInit || timerRead) {
       sysvarInit = true;
-      let reqUrl = this.genURL() + "XC_FNC=GetStates";
+      let reqUrl = this.genURL() + "XC_FNC=GetStates"  + "&auth=" + this.config.password;
       reqUrl = encodeURI(reqUrl);
       import_axios.default.get(reqUrl).then((res) => {
         this.log.debug(res.data);
@@ -610,7 +610,7 @@ class MediolaGateway extends utils.Adapter {
               this.log.error("only 1 (up), 2 (down) or 3 (stop) is allowed. For safety do a stop");
             }
             if (validMediolaFound) {
-              let reqUrl = this.genURL() + "XC_FNC=SendSC&type=RT&data=" + direction + actorId;
+              let reqUrl = this.genURL() + "XC_FNC=SendSC&type=RT&data=" + direction + actorId  + "&auth=" + this.config.password;
               reqUrl = encodeURI(reqUrl);
               import_axios.default.get(reqUrl).then((res) => {
                 this.log.debug(res.data);
@@ -712,7 +712,7 @@ class MediolaGateway extends utils.Adapter {
                 this.log.error("only 1 (up), 2 (down) or 3 (stop) is allowed. For safety do a stop");
               }
               if (validMediolaFound) {
-                let reqUrl = this.genURL() + "XC_FNC=SendSC&type=ER&data=" + actorId + direction;
+                let reqUrl = this.genURL() + "XC_FNC=SendSC&type=ER&data=" + actorId + direction  + "&auth=" + this.config.password;
                 reqUrl = encodeURI(reqUrl);
                 import_axios.default.get(reqUrl).then((res) => {
                   this.log.debug(res.data);
