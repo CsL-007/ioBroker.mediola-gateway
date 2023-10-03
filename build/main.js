@@ -57,7 +57,7 @@ class MediolaGateway extends utils.Adapter {
   genURL() {
     let retVal = "";
     if (this.config.username === "") {
-      retVal = "http://" + foundIpAddress + "/command?" + "&=" + this.config.password;
+      retVal = "http://" + foundIpAddress + "/command?" + "&auth=" + this.config.password;
     } else {
       retVal = "http://" + foundIpAddress + "/command?XC_USER=" + this.config.username + "&XC_PASS=" + this.config.password + "&";
     }
