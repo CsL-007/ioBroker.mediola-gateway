@@ -57,7 +57,7 @@ class MediolaGateway extends utils.Adapter {
   genURL() {
     let retVal = "";
     if (this.config.username === "") {
-      retVal = "http://" + foundIpAddress + "/command?" + "&auth=" + this.config.password;
+      retVal = "http://" + foundIpAddress + "/cmd?" + "&auth=" + this.config.password;
     } else {
       retVal = "http://" + foundIpAddress + "/command?XC_USER=" + this.config.username + "&XC_PASS=" + this.config.password + "&";
     }
@@ -69,7 +69,7 @@ class MediolaGateway extends utils.Adapter {
     );
     if (validMediolaFound && !sysvarInit || timerRead) {
       sysvarInit = true;
-      let reqUrl = this.genURL() + "XC_FNC=getstates";
+      let reqUrl = this.genURL() + "XC_FNC=GetStates";
       reqUrl = encodeURI(reqUrl);
       import_axios.default.get(reqUrl).then((res) => {
         this.log.debug(res.data);
