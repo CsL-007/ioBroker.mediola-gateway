@@ -55,12 +55,11 @@ class MediolaGateway extends utils.Adapter {
     }
   }
   genURL() {
-    let retVal = "";
-    if (this.config.username === "") {
-      retVal = "http://" + foundIpAddress + "/cmd?";
-    } else {
-      retVal = "http://" + foundIpAddress + "/command?XC_USER=" + this.config.username + "&XC_PASS=" + this.config.password + "&";
-    }
+    let retVal = "http://" + foundIpAddress + "/cmd?";
+    //if (this.config.username === "") {
+    //retVal = "http://" + foundIpAddress + "/cmd?";}
+    //else {
+    //  retVal = "http://" + foundIpAddress + "/command?XC_USER=" + this.config.username + "&XC_PASS=" + this.config.password + "&";}
     return retVal;
   }
   async readAllSystemVars(timerRead) {
