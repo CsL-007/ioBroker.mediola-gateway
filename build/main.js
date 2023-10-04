@@ -69,7 +69,7 @@ class MediolaGateway extends utils.Adapter {
     );
     if (validMediolaFound && !sysvarInit || timerRead) {
       sysvarInit = true;
-      let reqUrl = this.genURL() + "XC_FNC=GetStates"  + "&auth=" + this.config.password;
+      let reqUrl = this.genURL() + "XC_FNC=GetStates" + "&auth=" + this.config.password;
       reqUrl = encodeURI(reqUrl);
       import_axios.default.get(reqUrl).then((res) => {
         this.log.debug(res.data);
