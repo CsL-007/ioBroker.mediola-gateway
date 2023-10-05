@@ -1,6 +1,6 @@
 {
   "common": {
-    "name": "mediola-gateway",
+    "name": "mediola-gateway elero test",
     "version": "1.0.1",
     "news": {
       "1.0.1": {
@@ -96,7 +96,7 @@
       }
     },
     "titleLang": {
-      "en": "mediola GW",
+      "en": "mediola GW Elero test",
       "de": "mediola GW",
       "ru": "Медиола GW",
       "pt": "mediola GW",
