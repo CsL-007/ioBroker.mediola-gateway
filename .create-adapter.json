@@ -2,7 +2,7 @@
     "cli": true,
     "target": "directory",
     "adapterName": "mediola-gateway",
-    "title": "mediola GW",
+    "title": "mediola GW Elero test",
     "description": "Konfiguration und Verwendung des Mediola-Gateways",
     "keywords": ["media", "gateway", "mediola"],
     "expert": "yes",
