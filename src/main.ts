@@ -84,7 +84,7 @@ class MediolaGateway extends utils.Adapter {
                 .get(reqUrl)
                 .then((res) => {
                     this.log.debug(res.data);
-                    if (res.data.toString().startsWith("{XC_SUC}")) {
+                    if (res.data.toString().startsWith("{XC_SUC}") {
                         this.log.debug("mediola device found data: " + res.data);
                         try {
                             const jsonData = JSON.parse(res.data.substring(8));
