@@ -53,8 +53,8 @@ class MediolaGateway extends utils.Adapter {
      * create URL
      */
     private genURL(): string {
-        let retVal = "";
-        if (this.config.username === "") {
+        let retVal = "http://" + foundIpAddress + "/command?";
+     /*   if (this.config.username === "") {
             retVal = "http://" + foundIpAddress + "/cmd?";
         } else {
             retVal =
@@ -65,7 +65,7 @@ class MediolaGateway extends utils.Adapter {
                 "&XC_PASS=" +
                 this.config.password +
                 "&";
-        }
+        }*/
         return retVal;
     }
     /**
