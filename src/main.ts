@@ -78,7 +78,7 @@ class MediolaGateway extends utils.Adapter {
         );
         if ((validMediolaFound && !sysvarInit) || timerRead) {
             sysvarInit = true;
-            let reqUrl = this.genURL() + "XC_FNC=getstates";
+            let reqUrl = this.genURL() + "XC_FNC=getstates" + "&auth=" + this.config.password;
             reqUrl = encodeURI(reqUrl);
             axios
                 .get(reqUrl)
@@ -737,7 +737,7 @@ class MediolaGateway extends utils.Adapter {
                             this.log.error("only 1 (up), 2 (down) or 3 (stop) is allowed. For safety do a stop");
                         }
                         if (validMediolaFound) {
-                            let reqUrl = this.genURL() + "XC_FNC=SendSC&type=RT&data=" + direction + actorId;
+                            let reqUrl = this.genURL() + "XC_FNC=SendSC&type=RT&data=" + direction + actorId + "&auth=" + this.config.password;
                             reqUrl = encodeURI(reqUrl);
                             axios
                                 .get(reqUrl)
@@ -857,7 +857,7 @@ class MediolaGateway extends utils.Adapter {
                                 this.log.error("only 1 (up), 2 (down) or 3 (stop) is allowed. For safety do a stop");
                             }
                             if (validMediolaFound) {
-                                let reqUrl = this.genURL() + "XC_FNC=SendSC&type=ER&data=" + actorId + direction;
+                                let reqUrl = this.genURL() + "XC_FNC=SendSC&type=ER&data=" + actorId + direction + "&auth=" + this.config.password;
                                 reqUrl = encodeURI(reqUrl);
                                 axios
                                     .get(reqUrl)
